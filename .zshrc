@@ -119,4 +119,5 @@ export PATH=$PATH:~/volumeicon
 export PATH=$PATH:~/picom
 
 alias ls='ls -lAh --color=tty'
+alias python='python3'
 # xmodmap ~/.xmodmaprc
