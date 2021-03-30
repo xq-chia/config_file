@@ -6,29 +6,29 @@ filetype off     " Turn off filetype-specific indentation rule, required for Vun
 
 set rtp+=~/.vim/bundle/Vundle.vim   " Append the runtime path to include Vundle
 
-call vundle#begin('~/.vim/bundle/')   " Initialise Vundle
-Plugin 'VundleVim/Vundle.vim'         " Load vundle plugin
-Plugin 'morhetz/gruvbox'              " Load gruvbox colorscheme
-Plugin 'vim-airline/vim-airline'      " Load vim-airline plugin that handle vim status line
-Plugin 'vim-airline/vim-airline-themes' " Load gruvbox theme for vim-airline
-Plugin 'mhinz/vim-startify'           " Load vim-startify that handle vim splash screen
-Plugin 'jiangmiao/auto-pairs'         " Load auto-pairs that handle bracket and quote autocompletion
-Plugin 'tpope/vim-surround'           " Load vim-surround that handle surrounding bracket, quote, and tag
-Plugin 'tpope/vim-commentary'         " Load vim-commentary that handle code commentary
-Plugin 'alvan/vim-closetag'           " Load vim-closetag that handle html tag autocompletion
-Plugin 'SirVer/ultisnips'             " Load UltiSnips engine that manage code snippet
-Plugin 'honza/vim-snippets'           " Load vim-snippets for snippet engine to use
-Plugin 'ervandew/supertab'            " Load supertab that autocomplete with <Tab> key
-Plugin 'Yggdroot/indentLine'          " Load indentLine that visualise indentation with vertical line
-Plugin 'skywind3000/vim-preview'      " Load vim-preview that handle preview window
-Plugin 'majutsushi/tagbar'            " Load tagbar that display a code outline viewer
-Plugin 'scrooloose/syntastic'         " Load syntastic that check syntax error
-Plugin 'easymotion/vim-easymotion'    " Load easymotion that navigate file better
-Plugin 'haya14busa/vim-easyoperator-line'
-Plugin 'haya14busa/vim-easyoperator-phrase'
-Plugin 'wellle/targets.vim'           " Load targets that extend vim text object
-Plugin 'kshenoy/vim-signature'        " Load vim-signature that display mark
-Plugin 'simnalamburt/vim-mundo'       " Load vim-mundo that visualise vim undo history
+call vundle#begin('~/.vim/bundle/')         " Initialise Vundle
+Plugin 'VundleVim/Vundle.vim'               " Load vundle plugin
+Plugin 'morhetz/gruvbox'                    " Load gruvbox colorscheme
+Plugin 'vim-airline/vim-airline'            " Load vim-airline plugin that handle vim status line
+Plugin 'vim-airline/vim-airline-themes'     " Load gruvbox theme for vim-airline
+Plugin 'mhinz/vim-startify'                 " Load vim-startify that handle vim splash screen
+Plugin 'jiangmiao/auto-pairs'               " Load auto-pairs that handle bracket and quote autocompletion
+Plugin 'tpope/vim-surround'                 " Load vim-surround that handle surrounding bracket, quote, and tag
+Plugin 'tpope/vim-commentary'               " Load vim-commentary that handle code commentary
+Plugin 'alvan/vim-closetag'                 " Load vim-closetag that handle html tag autocompletion
+Plugin 'SirVer/ultisnips'                   " Load UltiSnips engine that manage code snippet
+Plugin 'honza/vim-snippets'                 " Load vim-snippets for snippet engine to use
+Plugin 'ervandew/supertab'                  " Load supertab that autocomplete with <Tab> key
+Plugin 'Yggdroot/indentLine'                " Load indentLine that visualise indentation with vertical line
+Plugin 'skywind3000/vim-preview'            " Load vim-preview that handle preview window
+Plugin 'majutsushi/tagbar'                  " Load tagbar that display a code outline viewer
+Plugin 'scrooloose/syntastic'               " Load syntastic that check syntax error
+Plugin 'easymotion/vim-easymotion'          " Load easymotion that navigate file better
+Plugin 'haya14busa/vim-easyoperator-line'   " Load vim-easyoperaotr-line that extend vim-easymotion
+Plugin 'haya14busa/vim-easyoperator-phrase' " Load vim-easyoperaotr-line that extend vim-easymotion
+Plugin 'wellle/targets.vim'                 " Load targets that extend vim text object
+Plugin 'kshenoy/vim-signature'              " Load vim-signature that display mark
+Plugin 'simnalamburt/vim-mundo'             " Load vim-mundo that visualise vim undo history
 Plugin 'tpope/vim-fugitive'
 call vundle#end()                     " Terminate initialisation of Vundle
 
@@ -165,6 +165,13 @@ map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
 map [] k$][%?}<CR>
 
+" ============
+" Abbreviation
+" ============
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Wq wq
+
 " ====================
 " User-defined Command
 " ====================
@@ -276,6 +283,8 @@ set completeopt=menuone,longest,preview " Show popup menu even there's only one 
 " ==========================
 " Vim-closetag Configuration
 " ==========================
+inoreabbrev ><CR> >>
+
 let g:closetag_emptyTags_caseSensitive=1  " Enable case sensitive for non-closing tag
 let g:closetag_close_shortcut='<leader>>' " Add > at current position without closing the current tag
 
