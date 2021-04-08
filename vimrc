@@ -36,11 +36,11 @@ filetype plugin indent on                   " Turn on filetype-specific, plugin-
 " ==========================
 " Text, tab, and indentation
 " ==========================
-set tabstop         =4   " Define the number of spaces the Tab character will take to 4
-set shiftwidth      =4   " Define the number of spaces '>>' will take to 4
+set tabstop         =4      " Define the number of spaces the Tab character will take to 4
+set shiftwidth      =4      " Define the number of spaces '>>' will take to 4
 set shiftround              " When shifting line, round the indentation to the multiple of 'shiftwidth'
 set expandtab               " Use space instead of tab character
-set softtabstop     =4   " Combine space and Tab character to fulfil tabstop number
+set softtabstop     =4      " Combine space and Tab character to fulfil tabstop number
 set smarttab                " Tab character is used for indentation, space is used for alignment
 
 set autoindent              " New lines inherit indentation from previous line
@@ -193,6 +193,9 @@ function! Prettier()
 endfunction
 " Create tag file with :MakeTags command
 command MakeTags !ctags
+" Remove corrupted undofile
+" TODO: runs automatically when detected error
+command FixUndoDir !find ~/.vim/temp_dir/undofile -size 0 -print -delete
 
 " =============
 " Alt Key Tweak
