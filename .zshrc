@@ -70,22 +70,11 @@ HIST_STAMPS="dd.mm.yyyy"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
 	web-search
-	tmux
 	colored-man-pages
     zsh-autosuggestions
 	zsh-syntax-highlighting
     vundle
 )
-
-# =========================
-# Tmux Plugin Configuration
-# =========================
-# Automatically starts tmux
-ZSH_TMUX_AUTOSTART=true
-# Automatically connects to a previous session if it exits
-ZSH_TMUX_AUTOCONNECT=false
-# Automatically close terminal if tmux exits
-ZSH_TMUX_AUTOQUIT=false
 
 source $ZSH/oh-my-zsh.sh
 
@@ -120,4 +109,6 @@ export PATH=$PATH:~/picom
 
 alias ls='ls -lAh --color=tty'
 alias python='python3'
-# xmodmap ~/.xmodmaprc
+alias qq='shutdown now'
+
+xmodmap ~/.xmodmaprc 2> /dev/null

@@ -1,4 +1,6 @@
-keycode 66 = Control_L
-keycode 37 = Meta_L
-
-clear lock
+remove Lock = Caps_Lock
+remove Control = Control_L
+keysym Caps_Lock = Control_L
+keysym Control_L = Super_L
+add Lock = Caps_Lock
+add Control = Control_L

@@ -30,7 +30,8 @@ Plugin 'kshenoy/vim-signature'              " Load vim-signature that display ma
 Plugin 'simnalamburt/vim-mundo'             " Load vim-mundo that visualise vim undo history
 Plugin 'tpope/vim-fugitive'                 " Load vim-fugitive which integrates git
 call vundle#end()                           " Terminate initialisation of Vundle
-
+" TODO: coc implementation for completion <04-05-21, yourname> "
+" TODO: syntastic replacement <04-05-21, yourname> "
 filetype plugin indent on                   " Turn on filetype-specific, plugin-specific indentation rule
 
 " ==========================
@@ -166,12 +167,18 @@ map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
 map [] k$][%?}<CR>
 
+" Space Space to exit insert mode
+inoremap <Space><Space> <ESC>
 " ============
 " Abbreviation
 " ============
+" Fix sticky shift on write/quit
 cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Wq wq
+
+" Show help message on a new tab
+cnoreabbrev h tab h
 
 " ====================
 " User-defined Command
@@ -287,9 +294,6 @@ set completeopt     =menuone,longest,preview    " Show popup menu even there's o
 " ==========================
 " Vim-closetag Configuration
 " ==========================
-" not working as intended
-inoreabbrev ><CR> >>
-
 let g:closetag_emptyTags_caseSensitive  =1              " Enable case sensitive for non-closing tag
 let g:closetag_close_shortcut           ='<leader>>'    " Add > at current position without closing the current tag
 
@@ -298,7 +302,7 @@ let g:closetag_close_shortcut           ='<leader>>'    " Add > at current posit
 " ======================
 let g:airline#extensions#tabline#enabled            =1                          " Enable 'smarter tab line' extension
 let g:airline_powerline_fonts                       =1                          " Integrate airline with powerline font
-let g:airline_theme                                 ='base16_gruvbox_dark_hard'
+let g:airline_theme                                 ='base16'
 let airline#extensions#syntastic#error_symbol       ='Err:'
 let airline#extensions#syntastic#stl_format_err     ='%E{[%fe(#%e)]}'
 let airline#extensions#syntastic#warning_symbol     ='W:'
