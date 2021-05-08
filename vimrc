@@ -167,8 +167,6 @@ map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
 map [] k$][%?}<CR>
 
-" Space Space to exit insert mode
-inoremap <Space><Space> <ESC>
 " ============
 " Abbreviation
 " ============
