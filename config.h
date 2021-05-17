@@ -73,10 +73,10 @@ static char *colors[][ColCount] = {
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 
 
-const char *spcmd1[] = {"gnome-terminal", NULL, "spterm", "-g", "120x34", NULL };
+const char *spcmd1[] = {"gnome-terminal", "--name", "quick-term", "--hide-menubar", "--geometry", "120x34", NULL };
 static Sp scratchpads[] = {
    /* name          cmd  */
-   {"spterm",      spcmd1},
+   {"quick-term",      spcmd1},
 };
 
 /* Tags
@@ -142,7 +142,7 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	RULE(.class = "Gimp", .tags = 1 << 4)
 	RULE(.class = "Firefox", .tags = 1 << 7)
-	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
+	RULE(.instance = "quick-term", .tags = SPTAG(0), .iscentered = 1, .isfloating = 1)
 };
 
 
@@ -274,7 +274,7 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
         /* scratchpad */
         /* !!HAVENT CONFIGURED!! */
-	{ MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
+	{ MODKEY|ControlMask|ShiftMask, XK_s,          togglescratch,          {.ui = 0 } },
 	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
 	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
         /* tag manipulation */

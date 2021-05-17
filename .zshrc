@@ -104,11 +104,10 @@ export LANG=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-export PATH=$PATH:~/volumeicon
-export PATH=$PATH:~/picom
 
 alias ls='ls -lAh --color=tty'
 alias python='python3'
 alias qq='shutdown now'
+alias rm='/bin/safe-rm'
 
 xmodmap ~/.xmodmaprc 2> /dev/null

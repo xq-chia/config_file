@@ -112,6 +112,7 @@ set spelllang   =en_gb                          " Define spellchecking to use UK
 set nrformats   =alpha,hex,bin                  " Define the standard vim used for increment with Ctrl-a and Ctrl-x
 set undodir     =~/.vim/temp_dir/undofile       " Define file location for undo file
 set undofile                                    " Allow persistent undo feature
+set viminfo     +=n~/.vim/viminfo               " Locate viminfor inside .vim directory
 let mapleader   ="\<Space>"                     " Define the leader key to <Space>
 
 " =========
@@ -317,8 +318,8 @@ let g:SuperTabClosePreviewOnPopupClose  =1          " Preview window is closed a
 " Auto-pairs Configuration
 " ========================
 " Tweaks for filetype-specific pairs
-autocmd filetype php    let b:AutoPairs=AutoPairsDefine({'<?':'?>', '<?php':'?>'})
-autocmd filetype html   let b:AutoPairs=AutoPairsDefine({'<!--':'-->'})
+autocmd filetype php    let b:AutoPairs=AutoPairsDefine({'<?':'?>'})
+autocmd filetype html   let b:AutoPairs=AutoPairsDefine({'<!--':'-->', '<?':'?>'})
 autocmd filetype c      let b:AutoPairs=AutoPairsDefine({'/*':'*/'})
 
 let g:AutoPairsFlyMode  =1 " Enable Fly Mode
@@ -377,7 +378,7 @@ call s:VimSignatureMapper()
 " =======================
 " Vim-mundo Configuration
 " =======================
-nnoremap <M-u> <C-O>:MundoToggle<CR>
+nnoremap <M-r> <C-O>:MundoToggle<CR>
 
 let g:mundo_width               =winwidth(0) / 5    " Mundo undo window occupy 20% of the screen
 let g:mundo_preview_height      =10                 " Mundo diff window occupy 10 lines
@@ -390,3 +391,11 @@ let g:mundo_auto_preview_delay  =0                  " Define timeout for Mundo p
 " UltiSnips Configuration
 " =======================
 let g:UltiSnipsEnableSnipMate   =0 " Disable the use of snipmate snippet
+
+" ==========================
+" Vim-fugitive Configuration
+" ==========================
+" Use changes on the left
+nnoremap <Leader>f :diffget <Bar> normal ]c<CR>
+" Use changes on the right
+nnoremap <Leader>j :diffget <Bar> normal ]c<CR>
