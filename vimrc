@@ -29,6 +29,7 @@ Plugin 'wellle/targets.vim'                 " Load targets that extend vim text 
 Plugin 'kshenoy/vim-signature'              " Load vim-signature that display mark
 Plugin 'simnalamburt/vim-mundo'             " Load vim-mundo that visualise vim undo history
 Plugin 'tpope/vim-fugitive'                 " Load vim-fugitive which integrates git
+Plugin 'bkad/CamelCaseMotion'               " Load CamelCaseMotion which move cursor with programming naming convention
 call vundle#end()                           " Terminate initialisation of Vundle
 " TODO: coc implementation for completion <04-05-21, yourname> "
 " TODO: syntastic replacement <04-05-21, yourname> "
@@ -90,7 +91,7 @@ set foldmethod      =syntax             " Automatic fold based on filetype
 set foldcolumn      =1                  " Define the number of column to 1 showing a fold
 
 " Open all the fold by default
-autocmd BufWinEnter * normal zR 
+autocmd BufWinEnter * normal zR
 
 set listchars       =trail:~,space:·    " Display trailing space as '~' and space as '·'
 
@@ -99,7 +100,7 @@ set noequalalways                       " Splitting window and closing window wo
 " =============
 " Miscellaneous
 " =============
-set encoding    =utf8                           " Encode file using utf-8 format
+set encoding    =utf-8                          " Encode file using utf-8 format
 set backspace   =indent,eol,start               " Allow backspacing over indentation, line breaks and insertion start
 set backupdir   =~/.vim/temp_dir/backupfile     " Define file location for backup file
 set backup                                      " Enable backup
@@ -129,11 +130,11 @@ nnoremap <Leader><CR> o<ESC>
 autocmd FileType c map p p'[=']
 autocmd FileType c map P P'[=']
 
-"  _____       _ _                                                                                             _   
-" |_   _|     | (_)                                                                                           | |  
-"   | |  _ __ | |_ _ __   ___    ___ _   _ _ __ ___  ___  _ __   _ __ ___   _____   _____ _ __ ___   ___ _ __ | |_ 
+"  _____       _ _                                                                                             _
+" |_   _|     | (_)                                                                                           | |
+"   | |  _ __ | |_ _ __   ___    ___ _   _ _ __ ___  ___  _ __   _ __ ___   _____   _____ _ __ ___   ___ _ __ | |_
 "   | | | '_ \| | | '_ \ / _ \  / __| | | | '__/ __|/ _ \| '__| | '_ ` _ \ / _ \ \ / / _ \ '_ ` _ \ / _ \ '_ \| __|
-"  _| |_| | | | | | | | |  __/ | (__| |_| | |  \__ \ (_) | |    | | | | | | (_) \ V /  __/ | | | | |  __/ | | | |_ 
+"  _| |_| | | | | | | | |  __/ | (__| |_| | |  \__ \ (_) | |    | | | | | | (_) \ V /  __/ | | | | |  __/ | | | |_
 " |_____|_| |_|_|_|_| |_|\___|  \___|\__,_|_|  |___/\___/|_|    |_| |_| |_|\___/ \_/ \___|_| |_| |_|\___|_| |_|\__|
 nnoremap j gj
 nnoremap k gk
@@ -163,10 +164,13 @@ function g:PreviewIncludedFunc()
 endfunction
 
 " Jump to start/end of function with K&R style
-map [[ ?{<CR>w99[{
-map ][ /}<CR>b99]}
-map ]] j0[[%/{<CR>
-map [] k$][%?}<CR>
+nnoremap [[ ?{<CR>w99[{
+nnoremap ][ /}<CR>b99]}
+nnoremap ]] j0[[%/{<CR>
+nnoremap [] k$][%?}<CR>
+
+" Disable highlight search
+nnoremap <leader>hi :nohls<CR>
 
 " ============
 " Abbreviation
@@ -239,7 +243,7 @@ nnoremap <M-f> :Lexplore<CR>
 " =======================
 " Termdebug Configuration
 " =======================
-packadd termdebug           " Load termdebug default plugin 
+packadd termdebug           " Load termdebug default plugin
 let g:termdebug_wide    =1  " Execute gdb program on vsplit
 
 " =====================
@@ -253,7 +257,7 @@ packadd matchit         " Load matchit default plugin
 " Display function signature at the command line
 nnoremap <NUL> :PreviewSignature!<CR>
 inoremap <NUL> <C-O>:PreviewSignature!<CR>
-" Display tag file for the word under cursor at the preview window 
+" Display tag file for the word under cursor at the preview window
 nnoremap <NUL><NUL> :PreviewTag<CR>
 inoremap <NUL><NUL> <C-O>:PreviewTag<CR>
 " Scrolling preview window without switching window focus
@@ -300,6 +304,7 @@ let g:closetag_close_shortcut           ='<leader>>'    " Add > at current posit
 " Air-line Configuration
 " ======================
 let g:airline#extensions#tabline#enabled            =1                          " Enable 'smarter tab line' extension
+let g:airline#extensions#tagbar#enabled             =1                          " Enable 'tagbar' extension
 let g:airline_powerline_fonts                       =1                          " Integrate airline with powerline font
 let g:airline_theme                                 ='base16'
 let airline#extensions#syntastic#error_symbol       ='Err:'
@@ -398,4 +403,22 @@ let g:UltiSnipsEnableSnipMate   =0 " Disable the use of snipmate snippet
 " Use changes on the left
 nnoremap <Leader>f :diffget <Bar> normal ]c<CR>
 " Use changes on the right
-nnoremap <Leader>j :diffget <Bar> normal ]c<CR>
+nnoremap <Leader>h :diffget <Bar> normal ]c<CR>
+
+" =============================
+" CamelCaseMotion Configuration
+" =============================
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+map <silent> ge <Plug>CamelCaseMotion_ge
+omap <silent> iw <Plug>CamelCaseMotion_iw
+xmap <silent> iw <Plug>CamelCaseMotion_iw
+omap <silent> ib <Plug>CamelCaseMotion_ib
+xmap <silent> ib <Plug>CamelCaseMotion_ib
+omap <silent> ie <Plug>CamelCaseMotion_ie
+xmap <silent> ie <Plug>CamelCaseMotion_ie
+sunmap w
+sunmap b
+sunmap e
+sunmap ge
