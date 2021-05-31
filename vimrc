@@ -15,25 +15,28 @@ Plugin 'jiangmiao/auto-pairs'               " Load auto-pairs that handle bracke
 Plugin 'tpope/vim-surround'                 " Load vim-surround that handle surrounding bracket, quote, and tag
 Plugin 'tpope/vim-commentary'               " Load vim-commentary that handle code commentary
 Plugin 'alvan/vim-closetag'                 " Load vim-closetag that handle html tag autocompletion
-Plugin 'SirVer/ultisnips'                   " Load UltiSnips engine that manage code snippet
 Plugin 'honza/vim-snippets'                 " Load vim-snippets for snippet engine to use
-Plugin 'ervandew/supertab'                  " Load supertab that autocomplete with <Tab> key
 Plugin 'Yggdroot/indentLine'                " Load indentLine that visualise indentation with vertical line
-Plugin 'skywind3000/vim-preview'            " Load vim-preview that handle preview window
 Plugin 'majutsushi/tagbar'                  " Load tagbar that display a code outline viewer
-Plugin 'scrooloose/syntastic'               " Load syntastic that check syntax error
 Plugin 'easymotion/vim-easymotion'          " Load easymotion that navigate file better
 Plugin 'haya14busa/vim-easyoperator-line'   " Load vim-easyoperaotr-line that extend vim-easymotion
 Plugin 'haya14busa/vim-easyoperator-phrase' " Load vim-easyoperaotr-line that extend vim-easymotion
 Plugin 'wellle/targets.vim'                 " Load targets that extend vim text object
 Plugin 'kshenoy/vim-signature'              " Load vim-signature that display mark
 Plugin 'simnalamburt/vim-mundo'             " Load vim-mundo that visualise vim undo history
+Plugin 'skywind3000/vim-preview'            " Load vim-preview that handle preview window
 Plugin 'tpope/vim-fugitive'                 " Load vim-fugitive which integrates git
 Plugin 'bkad/CamelCaseMotion'               " Load CamelCaseMotion which move cursor with programming naming convention
+Plugin 'neoclide/coc.nvim'                  " Load Conquer Of Completion which provide code completion solution
+Plugin 'dense-analysis/ale'                 " Load Asynchronous Lint Engine which provide linting solution
+Plugin 'junegunn/vim-peekaboo'              " Load vim-peekaboo that extends '"' and '@'
 call vundle#end()                           " Terminate initialisation of Vundle
-" TODO: coc implementation for completion <04-05-21, yourname> "
-" TODO: syntastic replacement <04-05-21, yourname> "
 filetype plugin indent on                   " Turn on filetype-specific, plugin-specific indentation rule
+" ale linter, fixer:  <30-05-21, yourname> "
+" coc lsp:  <31-05-21, yourname> "
+" ale extend filetype:  <30-05-21, yourname> "
+" coc extend filetype:  <30-05-21, yourname> "
+" vim-peekaboo:  <31-05-21, yourname> "
 
 " ==========================
 " Text, tab, and indentation
@@ -63,7 +66,7 @@ set scrolloff       =3                  " Always show last 3 lines when scrollin
 set laststatus      =2                  " Always display the status bar
 set wildmenu                            " Display command line's tab complete options as menu
 set showcmd                             " Display incomplete command
-set cmdheight       =1                  " Define the height of command bar
+set cmdheight       =2                  " Define the height of command bar
 set noshowmode                          " Disable built-in mode indicator
 
 set noerrorbells                        " Disable beep on error
@@ -102,8 +105,6 @@ set noequalalways                       " Splitting window and closing window wo
 " =============
 set encoding    =utf-8                          " Encode file using utf-8 format
 set backspace   =indent,eol,start               " Allow backspacing over indentation, line breaks and insertion start
-set backupdir   =~/.vim/temp_dir/backupfile     " Define file location for backup file
-set backup                                      " Enable backup
 set dir         =~/.vim/temp_dir/swapfile       " Define file location for swap file
 set swapfile                                    " Enable swapfile
 set confirm                                     " Prompt a confirmation dialog when closing an unsaved file
@@ -123,12 +124,45 @@ let mapleader   ="\<Space>"                     " Define the leader key to <Spac
 nnoremap Y y$
 nnoremap yy Y
 
-" Open newline without entering insert mode
-nnoremap <Leader><CR> o<ESC>
-
 " Format the indentation after put for c file
 autocmd FileType c map p p'[=']
 autocmd FileType c map P P'[=']
+
+" ======================
+" Text Object Keybinding
+" ======================
+" Function and class text objects
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+" Use CTRL-S for selections ranges.
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" ===========================
+" Cursor Movement Keybinding 
+" ===========================
+" Implement CamelCaseMotion as default motion
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+" Implement CamelCaseMotion as default in operator-pending mode
+map <silent> ge <Plug>CamelCaseMotion_ge
+omap <silent> iw <Plug>CamelCaseMotion_iw
+xmap <silent> iw <Plug>CamelCaseMotion_iw
+omap <silent> ib <Plug>CamelCaseMotion_ib
+xmap <silent> ib <Plug>CamelCaseMotion_ib
+omap <silent> ie <Plug>CamelCaseMotion_ie
+xmap <silent> ie <Plug>CamelCaseMotion_ie
+sunmap w
+sunmap b
+sunmap e
+sunmap ge
 
 "  _____       _ _                                                                                             _
 " |_   _|     | (_)                                                                                           | |
@@ -144,33 +178,130 @@ nnoremap k gk
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
-" Show man page for C built-in function
-inoremap <F1> <C-O>K
-nnoremap <F1> K
-set keywordprg+=\ 3                     " Allow <S-K> under normal mode to show C function man page
-
-" Include-search
-inoremap <M-i> <C-O>:exe "ilist /" . expand("<cword>") . " (/" <Bar>
-            \call g:PreviewIncludedFunc()<CR>
-nnoremap <M-i> :exe "ilist /" . expand("<cword>") . " (/" <Bar>
-            \call g:PreviewIncludedFunc()<CR>
-
-function g:PreviewIncludedFunc()
-    let ans=input("Peek at (<Enter> to return): ")
-
-    if ans !~# '^\s*$'
-        execute "psearch " . ans . " /" . expand("<cword>") . " (/"
-    endif
-endfunction
-
 " Jump to start/end of function with K&R style
 nnoremap [[ ?{<CR>w99[{
 nnoremap ][ /}<CR>b99]}
 nnoremap ]] j0[[%/{<CR>
 nnoremap [] k$][%?}<CR>
 
+" EasyMotion cursor movement
+map <Leader> <Plug>(easymotion-prefix)
+map <Plug>(easymotion-prefix)f <Plug>(easymotion-f)
+map <Plug>(easymotion-prefix)t <Plug>(easymotion-t)
+map <Plug>(easymotion-prefix)w <Plug>(easymotion-w)
+map <Plug>(easymotion-prefix)e <Plug>(easymotion-e)
+map <Plug>(easymotion-prefix)b <Plug>(easymotion-b)
+map <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
+map <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
+map <Plug>(easymotion-prefix)/ <Plug>(easymotion-sn)
+
+" ====================
+" GoTo Code Keybinding
+" ====================
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> ge <Plug>(ale_next_wrap_error)
+nmap <silent> gE <Plug>(ale_previous_wrap_error)
+nmap <silent> gw <Plug>(ale_next_wrap_warning)
+nmap <silent> gW <Plug>(ale_previous_wrap_warning)
+
+" ============================
+" Window Management Keybinding
+" ============================
+" Open directory browser
+nnoremap <M-f> :Lexplore<CR>
+inoremap <M-f> <C-O>:Lexplore<CR>
+
+" Open debugger
+nnoremap <M-d> :Termdebug<CR>
+inoremap <M-d> <C-O>:Termdebug<CR>
+
+" Open outliner
+nnoremap <M-o> :Tagbar<CR>
+inoremap <M-o> <C-O>:Tagbar<CR>
+
+" Open version controller
+nnoremap <M-u> :MundoToggle<CR>
+inoremap <M-u> <C-O>:MundoToggle<CR>
+
+" Open linter
+nmap <M-x> <Plug>(ale_detail)
+imap <M-x> <C-O><Plug>(ale_detail)
+
+" Scroll floating window/popup with <C-f> and <C-b>
+nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+
+" Close preview window
+nnoremap <M-x> :pclose<CR>
+inoremap <M-x> <C-O>:pclose<CR>
+" Scroll preview window
+nnoremap <M-k> :PreviewScroll -1<CR>
+inoremap <M-k> <C-O>:PreviewScroll -1<CR>
+nnoremap <M-j> :PreviewScroll +1<CR>
+inoremap <M-j> <C-O>:PreviewScroll +1<CR>
+
+" =====================
+" Leader Key Keybinding
+" =====================
+" Run linter
+nmap <leader>x <Plug>(ale_lint)
+
+" Run fixer
+" nmap <leader>f <Plug>(ale_fix)
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Use changes on the left
+nnoremap <Leader>a :diffget <Bar> normal ]c<CR>
+" Use changes on the right
+nnoremap <Leader>l :diffput <Bar> normal ]c<CR>
+
 " Disable highlight search
 nnoremap <leader>hi :nohls<CR>
+
+" Open newline without entering insert mode
+nnoremap <Leader>o o<ESC>
+
+" ===================
+" IDE-like Keybinding
+" ===================
+" Expand snippet with <leader><Tab>
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Show function signature with <C-Space>
+inoremap <NUL> <C-O>:call CocActionAsync('showSignatureHelp')<CR>
+
+" <Tab> to trigger completion and confirm completion
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+
+" <F1> to show documentation in preview window
+nnoremap <silent> <F1> :call <SID>show_documentation()<CR>
+inoremap <silent> <F1> <C-O>:call <SID>show_documentation()<CR>
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+    else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+endfunction
 
 " ============
 " Abbreviation
@@ -203,9 +334,13 @@ function! Prettier()
 endfunction
 " Create tag file with :MakeTags command
 command MakeTags !ctags
-" Remove corrupted undofile
+" Remove corrupted undofile with :FixUndoDir command
 " TODO: runs automatically when detected error
 command FixUndoDir !find ~/.vim/temp_dir/undofile -size 0 -print -delete
+" Fold current buffer with :Fold command
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+" Organise imports with :OrganiseImport command
+command! -nargs=0 OrganiseImport :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " =============
 " Alt Key Tweak
@@ -237,9 +372,6 @@ let g:netrw_winsize         =20     " Open netrw to occupy 20% of the window
 let g:netrw_browse_split    =3      " Open file in a new tab
 let g:netrw_liststyle       =3      " Display directory browser in tree view
 
-inoremap <M-f> <C-O>:Lexplore<CR>
-nnoremap <M-f> :Lexplore<CR>
-
 " =======================
 " Termdebug Configuration
 " =======================
@@ -250,49 +382,6 @@ let g:termdebug_wide    =1  " Execute gdb program on vsplit
 " Matchit Configuration
 " =====================
 packadd matchit         " Load matchit default plugin
-
-" =========================
-" Vim-preview Configuration
-" =========================
-" Display function signature at the command line
-nnoremap <NUL> :PreviewSignature!<CR>
-inoremap <NUL> <C-O>:PreviewSignature!<CR>
-" Display tag file for the word under cursor at the preview window
-nnoremap <NUL><NUL> :PreviewTag<CR>
-inoremap <NUL><NUL> <C-O>:PreviewTag<CR>
-" Scrolling preview window without switching window focus
-nnoremap <M-u> :PreviewScroll -1<CR>
-inoremap <M-u> <C-O>:PreviewScroll -1<CR>
-nnoremap <M-d> :PreviewScroll +1<CR>
-inoremap <M-d> <C-O>:PreviewScroll +1<CR>
-" Close preview window
-nnoremap <M-x> :pclose<CR>
-inoremap <M-x> <C-O>:pclose<CR>
-" Preview file
-nnoremap <M-l> :let file=input("Peak at: ", "", "file") <Bar>
-            \:exe "PreviewFile " . file<CR>
-inoremap <M-l> <C-O>:let file=input("Peak at: ", "", "file") <Bar>
-            \:exe "PreviewFile " . file<CR>
-
-let g:preview#preview_position  ='top'  " Preview window is opened on top
-let g:preview#preview_size      =5      " Preview window has a height of 5 lines
-
-" set tags+=                            " Define tags file for vim to look at
-
-" ============================
-" OmniCompletion Configuration
-" ============================
-" Enable language-specific autocompletion
-autocmd filetype css        set         omnifunc=csscomplete#CompleteCSS
-autocmd filetype html       set         omnifunc=htmlcomplete#CompleteTags
-autocmd filetype javascript set         omnifunc=javascriptcomplete#CompleteJS
-autocmd filetype php        set         omnifunc=phpcomplete#CompletePHP
-autocmd filetype c          setlocal    omnifunc=ccomplete#Complete
-autocmd filetype cpp        setlocal    omnifunc=cppcomplete#Complete
-autocmd filetype python     setlocal    omnifunc=python3complete#Complete
-autocmd filetype java       setlocal    omnifunc=javacomplete#Complete
-
-set completeopt     =menuone,longest,preview    " Show popup menu even there's only one suggestion, suggest the closest match, show a preview window for additional info
 
 " ==========================
 " Vim-closetag Configuration
@@ -307,26 +396,12 @@ let g:airline#extensions#tabline#enabled            =1                          
 let g:airline#extensions#tagbar#enabled             =1                          " Enable 'tagbar' extension
 let g:airline_powerline_fonts                       =1                          " Integrate airline with powerline font
 let g:airline_theme                                 ='base16'
-let airline#extensions#syntastic#error_symbol       ='Err:'
-let airline#extensions#syntastic#stl_format_err     ='%E{[%fe(#%e)]}'
-let airline#extensions#syntastic#warning_symbol     ='W:'
-let airline#extensions#syntastic#stl_format_warn    ='%W{[%fw(#%w)]}'
-
-" ======================
-" SuperTab Configuration
-" ======================
-let g:SuperTabDefaultCompletionType     ="context"  " Enable completion based on context
-let g:SuperTabLongestHighlight          =1          " Completion suggestion in the completion pop up menu is pre-selected
-let g:SuperTabClosePreviewOnPopupClose  =1          " Preview window is closed automatically upon completion done
+let airline#extensions#ale#error_symbol             ='Err:'
+let airline#extensions#ale#warning_symbol           ='W:'
 
 " ========================
 " Auto-pairs Configuration
 " ========================
-" Tweaks for filetype-specific pairs
-autocmd filetype php    let b:AutoPairs=AutoPairsDefine({'<?':'?>'})
-autocmd filetype html   let b:AutoPairs=AutoPairsDefine({'<!--':'-->', '<?':'?>'})
-autocmd filetype c      let b:AutoPairs=AutoPairsDefine({'/*':'*/'})
-
 let g:AutoPairsFlyMode  =1 " Enable Fly Mode
 
 " ====================
@@ -344,23 +419,11 @@ let g:no_status_line                    =1                                      
 
 highlight default link TagbarSignature Normal
 
-inoremap <M-o> <C-O>:Tagbar<CR>
-nnoremap <M-o> :Tagbar<CR>
 
 " ========================
 " EasyMotion Configuration
 " ========================
 let g:EasyMotion_do_mapping=0
-
-map <Leader> <Plug>(easymotion-prefix)
-map <Plug>(easymotion-prefix)f <Plug>(easymotion-f)
-map <Plug>(easymotion-prefix)t <Plug>(easymotion-t)
-map <Plug>(easymotion-prefix)w <Plug>(easymotion-w)
-map <Plug>(easymotion-prefix)e <Plug>(easymotion-e)
-map <Plug>(easymotion-prefix)b <Plug>(easymotion-b)
-map <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
-map <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
-map <Plug>(easymotion-prefix)/ <Plug>(easymotion-sn)
 
 highlight EasyMotionTarget          cterm=bold ctermbg=NONE ctermfg=Red gui=bold guibg=NONE guifg=Red
 highlight EasyMotionTarget2First    cterm=bold ctermbg=NONE ctermfg=Red gui=bold guibg=NONE guifg=Red
@@ -383,8 +446,6 @@ call s:VimSignatureMapper()
 " =======================
 " Vim-mundo Configuration
 " =======================
-nnoremap <M-r> <C-O>:MundoToggle<CR>
-
 let g:mundo_width               =winwidth(0) / 5    " Mundo undo window occupy 20% of the screen
 let g:mundo_preview_height      =10                 " Mundo diff window occupy 10 lines
 let g:mundo_preview_bottom      =1                  " Display Mundo diff window at bottom
@@ -392,33 +453,46 @@ let g:mundo_tree_statusline     ="Mundo UndoTree"   " Define name of Mundo undo 
 let g:mundo_preview_statusline  ="Mundo Diff"       " Define name of Mundo diff window
 let g:mundo_auto_preview_delay  =0                  " Define timeout for Mundo preview
 
-" =======================
-" UltiSnips Configuration
-" =======================
-let g:UltiSnipsEnableSnipMate   =0 " Disable the use of snipmate snippet
+" =====================
+" Conquer Of Completion
+" =====================
+" Required, for coc to work properly
+set hidden
+set nobackup
+set nowritebackup
 
-" ==========================
-" Vim-fugitive Configuration
-" ==========================
-" Use changes on the left
-nnoremap <Leader>f :diffget <Bar> normal ]c<CR>
-" Use changes on the right
-nnoremap <Leader>h :diffget <Bar> normal ]c<CR>
+set updatetime  =1000                            " Shorter updatetime for better user experience of CursorHold event
+set shortmess   +=c                             " Don't pass messages to 'ins-completion-menu'
+set signcolumn  =number                         " Merge signcolumn and numbercolumn
+set completeopt     =menuone,longest,preview    " Show popup menu even there's only one suggestion, suggest the closest match, show a preview window for additional info
 
-" =============================
-" CamelCaseMotion Configuration
-" =============================
-map <silent> w <Plug>CamelCaseMotion_w
-map <silent> b <Plug>CamelCaseMotion_b
-map <silent> e <Plug>CamelCaseMotion_e
-map <silent> ge <Plug>CamelCaseMotion_ge
-omap <silent> iw <Plug>CamelCaseMotion_iw
-xmap <silent> iw <Plug>CamelCaseMotion_iw
-omap <silent> ib <Plug>CamelCaseMotion_ib
-xmap <silent> ib <Plug>CamelCaseMotion_ib
-omap <silent> ie <Plug>CamelCaseMotion_ie
-xmap <silent> ie <Plug>CamelCaseMotion_ie
-sunmap w
-sunmap b
-sunmap e
-sunmap ge
+let g:coc_config_home  ='~/.vim'                " Configure the directory which will be used to look for 'coc-settings.json'
+
+
+" Highlight the symbol and its references when holding the cursor
+autocmd CursorHold * silent call CocActionAsync('highlight')
+highlight default link CocHighlightText EasyMotionIncSearch
+
+" ======================================
+" Asynchronous Lint Engine Configuration
+" ======================================
+let g:ale_change_sign_column_color  =1              " Change colour of signcolumn when detected error
+let g:ale_close_preview_on_insert   =1              " Automatically close preview window in insert mode
+
+" Only lint when save file
+let g:ale_lint_on_filetype_changed  =0
+let g:ale_lint_on_text_changed      =0
+let g:ale_lint_on_insert_leave      =0
+
+" Fix when save file
+" let g:ale_fix_on_save               =1
+
+" Define fixer
+let g:ale_fixers = {
+    \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+    \}
+
+" Define linter
+let g:ale_linters = {
+            \
+            \}
