@@ -152,7 +152,6 @@ map <silent> w <Plug>CamelCaseMotion_w
 map <silent> b <Plug>CamelCaseMotion_b
 map <silent> e <Plug>CamelCaseMotion_e
 " Implement CamelCaseMotion as default in operator-pending mode
-map <silent> ge <Plug>CamelCaseMotion_ge
 omap <silent> iw <Plug>CamelCaseMotion_iw
 xmap <silent> iw <Plug>CamelCaseMotion_iw
 omap <silent> ib <Plug>CamelCaseMotion_ib
@@ -162,7 +161,6 @@ xmap <silent> ie <Plug>CamelCaseMotion_ie
 sunmap w
 sunmap b
 sunmap e
-sunmap ge
 
 "  _____       _ _                                                                                             _
 " |_   _|     | (_)                                                                                           | |
@@ -198,14 +196,14 @@ map <Plug>(easymotion-prefix)/ <Plug>(easymotion-sn)
 " ====================
 " GoTo Code Keybinding
 " ====================
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> ge <Plug>(ale_next_wrap_error)
-nmap <silent> gE <Plug>(ale_previous_wrap_error)
-nmap <silent> gw <Plug>(ale_next_wrap_warning)
-nmap <silent> gW <Plug>(ale_previous_wrap_warning)
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gy <Plug>(coc-type-definition)
+nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
+nnoremap <silent> ge <Plug>(ale_next_wrap_error)
+nnoremap <silent> gE <Plug>(ale_previous_wrap_error)
+nnoremap <silent> gw <Plug>(ale_next_wrap_warning)
+nnoremap <silent> gW <Plug>(ale_previous_wrap_warning)
 
 " ============================
 " Window Management Keybinding
@@ -227,8 +225,8 @@ nnoremap <M-u> :MundoToggle<CR>
 inoremap <M-u> <C-O>:MundoToggle<CR>
 
 " Open linter
-nmap <M-x> <Plug>(ale_detail)
-imap <M-x> <C-O><Plug>(ale_detail)
+nnoremap <M-x> <Plug>(ale_detail)
+inoremap <M-x> <C-O><Plug>(ale_detail)
 
 " Scroll floating window/popup with <C-f> and <C-b>
 nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -239,8 +237,8 @@ inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float
 vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
 " Close preview window
-nnoremap <M-x> :pclose<CR>
-inoremap <M-x> <C-O>:pclose<CR>
+nnoremap <M-q> :pclose<CR>
+inoremap <M-q> <C-O>:pclose<CR>
 " Scroll preview window
 nnoremap <M-k> :PreviewScroll -1<CR>
 inoremap <M-k> <C-O>:PreviewScroll -1<CR>
@@ -251,18 +249,18 @@ inoremap <M-j> <C-O>:PreviewScroll +1<CR>
 " Leader Key Keybinding
 " =====================
 " Run linter
-nmap <leader>x <Plug>(ale_lint)
+nnoremap <leader>x <Plug>(ale_lint)
 
 " Run fixer
-" nmap <leader>f <Plug>(ale_fix)
+nnoremap <leader>f <Plug>(ale_fix)
 
 " Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+nnoremap <leader>rn <Plug>(coc-rename)
 
 " Use changes on the left
-nnoremap <Leader>a :diffget <Bar> normal ]c<CR>
+nnoremap <Leader>l :diffget <Bar> normal ]c<CR>
 " Use changes on the right
-nnoremap <Leader>l :diffput <Bar> normal ]c<CR>
+nnoremap <Leader>a :diffput <Bar> normal ]c<CR>
 
 " Disable highlight search
 nnoremap <leader>hi :nohls<CR>
@@ -274,7 +272,7 @@ nnoremap <Leader>o o<ESC>
 " IDE-like Keybinding
 " ===================
 " Expand snippet with <leader><Tab>
-imap <C-l> <Plug>(coc-snippets-expand)
+inoremap <C-l> <Plug>(coc-snippets-expand)
 
 " Show function signature with <C-Space>
 inoremap <NUL> <C-O>:call CocActionAsync('showSignatureHelp')<CR>
