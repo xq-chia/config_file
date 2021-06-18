@@ -37,6 +37,7 @@ filetype plugin indent on                   " Turn on filetype-specific, plugin-
 " ale extend filetype:  <30-05-21, yourname> "
 " coc extend filetype:  <30-05-21, yourname> "
 " vim-peekaboo:  <31-05-21, yourname> "
+" coc goto* jump to next occurance:  <18-06-21, yourname> "
 
 " ==========================
 " Text, tab, and indentation
@@ -196,14 +197,14 @@ map <Plug>(easymotion-prefix)/ <Plug>(easymotion-sn)
 " ====================
 " GoTo Code Keybinding
 " ====================
-nnoremap <silent> gd <Plug>(coc-definition)
-nnoremap <silent> gy <Plug>(coc-type-definition)
-nnoremap <silent> gi <Plug>(coc-implementation)
-nnoremap <silent> gr <Plug>(coc-references)
-nnoremap <silent> ge <Plug>(ale_next_wrap_error)
-nnoremap <silent> gE <Plug>(ale_previous_wrap_error)
-nnoremap <silent> gw <Plug>(ale_next_wrap_warning)
-nnoremap <silent> gW <Plug>(ale_previous_wrap_warning)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> ge <Plug>(ale_next_wrap_error)
+nmap <silent> gE <Plug>(ale_previous_wrap_error)
+nmap <silent> gw <Plug>(ale_next_wrap_warning)
+nmap <silent> gW <Plug>(ale_previous_wrap_warning)
 
 " ============================
 " Window Management Keybinding
@@ -225,8 +226,8 @@ nnoremap <M-u> :MundoToggle<CR>
 inoremap <M-u> <C-O>:MundoToggle<CR>
 
 " Open linter
-nnoremap <M-x> <Plug>(ale_detail)
-inoremap <M-x> <C-O><Plug>(ale_detail)
+nmap <M-x> <Plug>(ale_detail)
+imap <M-x> <Plug>(ale_detail)
 
 " Scroll floating window/popup with <C-f> and <C-b>
 nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -249,13 +250,13 @@ inoremap <M-j> <C-O>:PreviewScroll +1<CR>
 " Leader Key Keybinding
 " =====================
 " Run linter
-nnoremap <leader>x <Plug>(ale_lint)
+nmap <leader>x <Plug>(ale_lint)
 
 " Run fixer
-nnoremap <leader>f <Plug>(ale_fix)
+nmap <leader>f <Plug>(ale_fix)
 
 " Symbol renaming.
-nnoremap <leader>rn <Plug>(coc-rename)
+nmap <leader>rn <Plug>(coc-rename)
 
 " Use changes on the left
 nnoremap <Leader>l :diffget <Bar> normal ]c<CR>
@@ -272,7 +273,7 @@ nnoremap <Leader>o o<ESC>
 " IDE-like Keybinding
 " ===================
 " Expand snippet with <leader><Tab>
-inoremap <C-l> <Plug>(coc-snippets-expand)
+imap <C-l> <Plug>(coc-snippets-expand)
 
 " Show function signature with <C-Space>
 inoremap <NUL> <C-O>:call CocActionAsync('showSignatureHelp')<CR>
