@@ -37,7 +37,6 @@ filetype plugin indent on                   " Turn on filetype-specific, plugin-
 " ale extend filetype:  <30-05-21, yourname> "
 " coc extend filetype:  <30-05-21, yourname> "
 " vim-peekaboo:  <31-05-21, yourname> "
-" coc goto* jump to next occurance:  <18-06-21, yourname> "
 
 " ==========================
 " Text, tab, and indentation
@@ -90,12 +89,6 @@ syntax on                               " Enable syntax highlighting
 set wrap                                " Wrap line to fit the window size
 set linebreak                           " Wrap line at word boundary
 set colorcolumn     =80,100             " Draw a line at column 80
-
-set foldmethod      =syntax             " Automatic fold based on filetype
-set foldcolumn      =1                  " Define the number of column to 1 showing a fold
-
-" Open all the fold by default
-autocmd BufWinEnter * normal zR
 
 set listchars       =trail:~,space:·    " Display trailing space as '~' and space as '·'
 
@@ -198,9 +191,10 @@ map <Plug>(easymotion-prefix)/ <Plug>(easymotion-sn)
 " GoTo Code Keybinding
 " ====================
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gD <Plug>(coc-declaration)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gr <Plug>(coc-references-used)
 nmap <silent> ge <Plug>(ale_next_wrap_error)
 nmap <silent> gE <Plug>(ale_previous_wrap_error)
 nmap <silent> gw <Plug>(ale_next_wrap_warning)
