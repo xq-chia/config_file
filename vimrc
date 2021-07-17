@@ -15,7 +15,6 @@ Plugin 'jiangmiao/auto-pairs'               " Load auto-pairs that handle bracke
 Plugin 'tpope/vim-surround'                 " Load vim-surround that handle surrounding bracket, quote, and tag
 Plugin 'tpope/vim-commentary'               " Load vim-commentary that handle code commentary
 Plugin 'alvan/vim-closetag'                 " Load vim-closetag that handle html tag autocompletion
-Plugin 'honza/vim-snippets'                 " Load vim-snippets for snippet engine to use
 Plugin 'Yggdroot/indentLine'                " Load indentLine that visualise indentation with vertical line
 Plugin 'majutsushi/tagbar'                  " Load tagbar that display a code outline viewer
 Plugin 'easymotion/vim-easymotion'          " Load easymotion that navigate file better
@@ -24,11 +23,8 @@ Plugin 'haya14busa/vim-easyoperator-phrase' " Load vim-easyoperaotr-line that ex
 Plugin 'wellle/targets.vim'                 " Load targets that extend vim text object
 Plugin 'kshenoy/vim-signature'              " Load vim-signature that display mark
 Plugin 'simnalamburt/vim-mundo'             " Load vim-mundo that visualise vim undo history
-Plugin 'skywind3000/vim-preview'            " Load vim-preview that handle preview window
 Plugin 'tpope/vim-fugitive'                 " Load vim-fugitive which integrates git
 Plugin 'bkad/CamelCaseMotion'               " Load CamelCaseMotion which move cursor with programming naming convention
-Plugin 'neoclide/coc.nvim'                  " Load Conquer Of Completion which provide code completion solution
-Plugin 'dense-analysis/ale'                 " Load Asynchronous Lint Engine which provide linting solution
 Plugin 'junegunn/vim-peekaboo'              " Load vim-peekaboo that extends '"' and '@'
 call vundle#end()                           " Terminate initialisation of Vundle
 filetype plugin indent on                   " Turn on filetype-specific, plugin-specific indentation rule
@@ -57,8 +53,11 @@ set smartindent             " Auto indentation reacting to C-style programming
 set title                               " Set the window's title
 set tabpagemax      =10                 " Define the maximum number of tab pages that can be opened
 
+set completeopt     =menuone,longest,preview    " Show popup menu even there's only one suggestion, suggest the closest match, show a preview window for additional info
+
 set number                              " Show the line numbers on the sidebar
 set relativenumber                      " Show line number on the current line and relative numbers on all other lines
+set signcolumn  =number                         " Merge signcolumn and numbercolumn
 set cursorline                          " Highlight the line currently under cursor
 set ruler                               " Always show cursor position at the status bar
 set scrolloff       =3                  " Always show last 3 lines when scrolling
@@ -66,7 +65,7 @@ set scrolloff       =3                  " Always show last 3 lines when scrollin
 set laststatus      =2                  " Always display the status bar
 set wildmenu                            " Display command line's tab complete options as menu
 set showcmd                             " Display incomplete command
-set cmdheight       =2                  " Define the height of command bar
+set cmdheight       =1                  " Define the height of command bar
 set noshowmode                          " Disable built-in mode indicator
 
 set noerrorbells                        " Disable beep on error
@@ -99,6 +98,8 @@ set noequalalways                       " Splitting window and closing window wo
 " =============
 set encoding    =utf-8                          " Encode file using utf-8 format
 set backspace   =indent,eol,start               " Allow backspacing over indentation, line breaks and insertion start
+set backupdir   =~/.vim/temp_dir/backupfile     " Define file location for backup file
+set backup                                      " Enable backup
 set dir         =~/.vim/temp_dir/swapfile       " Define file location for swap file
 set swapfile                                    " Enable swapfile
 set confirm                                     " Prompt a confirmation dialog when closing an unsaved file
@@ -111,6 +112,19 @@ set undofile                                    " Allow persistent undo feature
 set viminfo     +=n~/.vim/viminfo               " Locate viminfor inside .vim directory
 let mapleader   ="\<Space>"                     " Define the leader key to <Space>
 
+" ============================
+" OmniCompletion Configuration
+" ============================
+" Enable language-specific autocompletion
+autocmd filetype css        set         omnifunc=csscomplete#CompleteCSS
+autocmd filetype html       set         omnifunc=htmlcomplete#CompleteTags
+autocmd filetype javascript set         omnifunc=javascriptcomplete#CompleteJS
+autocmd filetype php        set         omnifunc=phpcomplete#CompletePHP
+autocmd filetype c          setlocal    omnifunc=ccomplete#Complete
+autocmd filetype cpp        setlocal    omnifunc=cppcomplete#Complete
+autocmd filetype python     setlocal    omnifunc=python3complete#Complete
+autocmd filetype java       setlocal    omnifunc=javacomplete#Complete
+
 " =========
 " Key remap
 " =========
@@ -121,22 +135,6 @@ nnoremap yy Y
 " Format the indentation after put for c file
 autocmd FileType c map p p'[=']
 autocmd FileType c map P P'[=']
-
-" ======================
-" Text Object Keybinding
-" ======================
-" Function and class text objects
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-" Use CTRL-S for selections ranges.
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
 
 " ===========================
 " Cursor Movement Keybinding 
@@ -187,19 +185,6 @@ map <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
 map <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
 map <Plug>(easymotion-prefix)/ <Plug>(easymotion-sn)
 
-" ====================
-" GoTo Code Keybinding
-" ====================
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gD <Plug>(coc-declaration)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references-used)
-nmap <silent> ge <Plug>(ale_next_wrap_error)
-nmap <silent> gE <Plug>(ale_previous_wrap_error)
-nmap <silent> gw <Plug>(ale_next_wrap_warning)
-nmap <silent> gW <Plug>(ale_previous_wrap_warning)
-
 " ============================
 " Window Management Keybinding
 " ============================
@@ -219,18 +204,6 @@ inoremap <M-o> <C-O>:Tagbar<CR>
 nnoremap <M-u> :MundoToggle<CR>
 inoremap <M-u> <C-O>:MundoToggle<CR>
 
-" Open linter
-nmap <M-x> <Plug>(ale_detail)
-imap <M-x> <Plug>(ale_detail)
-
-" Scroll floating window/popup with <C-f> and <C-b>
-nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-
 " Close preview window
 nnoremap <M-q> :pclose<CR>
 inoremap <M-q> <C-O>:pclose<CR>
@@ -243,15 +216,6 @@ inoremap <M-j> <C-O>:PreviewScroll +1<CR>
 " =====================
 " Leader Key Keybinding
 " =====================
-" Run linter
-nmap <leader>x <Plug>(ale_lint)
-
-" Run fixer
-nmap <leader>f <Plug>(ale_fix)
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
 " Use changes on the left
 nnoremap <Leader>l :diffget <Bar> normal ]c<CR>
 " Use changes on the right
@@ -262,39 +226,6 @@ nnoremap <leader>hi :nohls<CR>
 
 " Open newline without entering insert mode
 nnoremap <Leader>o o<ESC>
-
-" ===================
-" IDE-like Keybinding
-" ===================
-" Expand snippet with <leader><Tab>
-imap <C-l> <Plug>(coc-snippets-expand)
-
-" Show function signature with <C-Space>
-inoremap <NUL> <C-O>:call CocActionAsync('showSignatureHelp')<CR>
-
-" <Tab> to trigger completion and confirm completion
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <TAB>
-            \ pumvisible() ? "\<C-n>" :
-            \ <SID>check_back_space() ? "\<TAB>" :
-            \ coc#refresh()
-
-" <F1> to show documentation in preview window
-nnoremap <silent> <F1> :call <SID>show_documentation()<CR>
-inoremap <silent> <F1> <C-O>:call <SID>show_documentation()<CR>
-function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    elseif (coc#rpc#ready())
-        call CocActionAsync('doHover')
-    else
-        execute '!' . &keywordprg . " " . expand('<cword>')
-    endif
-endfunction
 
 " ============
 " Abbreviation
@@ -330,10 +261,6 @@ command MakeTags !ctags
 " Remove corrupted undofile with :FixUndoDir command
 " TODO: runs automatically when detected error
 command FixUndoDir !find ~/.vim/temp_dir/undofile -size 0 -print -delete
-" Fold current buffer with :Fold command
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-" Organise imports with :OrganiseImport command
-command! -nargs=0 OrganiseImport :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " =============
 " Alt Key Tweak
@@ -445,47 +372,3 @@ let g:mundo_preview_bottom      =1                  " Display Mundo diff window 
 let g:mundo_tree_statusline     ="Mundo UndoTree"   " Define name of Mundo undo window
 let g:mundo_preview_statusline  ="Mundo Diff"       " Define name of Mundo diff window
 let g:mundo_auto_preview_delay  =0                  " Define timeout for Mundo preview
-
-" =====================
-" Conquer Of Completion
-" =====================
-" Required, for coc to work properly
-set hidden
-set nobackup
-set nowritebackup
-
-set updatetime  =1000                            " Shorter updatetime for better user experience of CursorHold event
-set shortmess   +=c                             " Don't pass messages to 'ins-completion-menu'
-set signcolumn  =number                         " Merge signcolumn and numbercolumn
-set completeopt     =menuone,longest,preview    " Show popup menu even there's only one suggestion, suggest the closest match, show a preview window for additional info
-
-let g:coc_config_home  ='~/.vim'                " Configure the directory which will be used to look for 'coc-settings.json'
-
-
-" Highlight the symbol and its references when holding the cursor
-autocmd CursorHold * silent call CocActionAsync('highlight')
-highlight default link CocHighlightText EasyMotionIncSearch
-
-" ======================================
-" Asynchronous Lint Engine Configuration
-" ======================================
-let g:ale_change_sign_column_color  =1              " Change colour of signcolumn when detected error
-let g:ale_close_preview_on_insert   =1              " Automatically close preview window in insert mode
-
-" Only lint when save file
-let g:ale_lint_on_filetype_changed  =0
-let g:ale_lint_on_text_changed      =0
-let g:ale_lint_on_insert_leave      =0
-
-" Fix when save file
-" let g:ale_fix_on_save               =1
-
-" Define fixer
-let g:ale_fixers = {
-    \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-    \}
-
-" Define linter
-let g:ale_linters = {
-            \
-            \}
